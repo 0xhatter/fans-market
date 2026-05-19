@@ -2,11 +2,33 @@ import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+function extractMascotPng(html, publicDir) {
+  const match = html.match(/window\.__resources\s*=\s*(\{[\s\S]*?\});/);
+  if (!match) return;
+  const resources = JSON.parse(match[1]);
+  const dataUrl = resources.mascotPng;
+  if (!dataUrl?.startsWith("data:image/png;base64,")) return;
+  const b64 = dataUrl.split(",", 2)[1];
+  mkdirSync(publicDir, { recursive: true });
+  writeFileSync(join(publicDir, "mascot.png"), Buffer.from(b64, "base64"));
+}
+
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const html = readFileSync(join(root, "Fans Market.html"), "utf8");
 
 const styleMatch = html.match(/<style>([\s\S]*?)<\/style>/);
-const styles = styleMatch?.[1]?.trim() ?? "";
+let styles = styleMatch?.[1]?.trim() ?? "";
+// Inline mascot PNG is ~4MB; use public/mascot.png instead (see unpack / prepare flow).
+styles = styles.replace(
+  /\.mascot \{ background-image: url\("data:image\/png;base64,[\s\S]*?"\); background-size: contain; background-repeat: no-repeat; background-position: center; filter: drop-shadow\(0 12px 30px rgba\(255,45,45,0\.4\)\); \}/,
+  `.mascot {
+  background-image: url("/mascot.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: drop-shadow(0 12px 30px rgba(255, 45, 45, 0.4));
+}`,
+);
 
 const babelBlocks = [...html.matchAll(/<script type="text\/babel">([\s\S]*?)<\/script>/g)].map(
   (m) => m[1].trim(),
@@ -41,6 +63,7 @@ export default function FansMarketApp() {
 
 mkdirSync(join(root, "app"), { recursive: true });
 mkdirSync(join(root, "components"), { recursive: true });
+extractMascotPng(html, join(root, "public"));
 writeFileSync(join(root, "app", "globals.css"), styles);
 writeFileSync(join(root, "components", "FansMarketApp.jsx"), component);
 

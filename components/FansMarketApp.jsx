@@ -985,7 +985,7 @@ const Mascot = ({ size = 120, floaty = false, style = {} }) => (
 const Splash = ({ size = 22 }) => (
   <span style={{
     display: "inline-block", width: size, height: size,
-    backgroundImage: `url(${(window.__resources && window.__resources.mascotPng) || 'assets/mascot.png'})`,
+    backgroundImage: `url(${(typeof window !== "undefined" && window.__resources?.mascotPng) || "/mascot.png"})`,
     backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center",
     flexShrink: 0,
   }}/>
@@ -1306,11 +1306,16 @@ const ProfilePicker = ({ onSelect }) => (
     <BrandMark size={16}/>
 
     <div style={{ marginTop: 26, display: "flex", justifyContent: "center" }}>
-      <Mascot size={150} floaty/>
+      <img
+        src="/VideoProject11-ezgif.com-gif-maker.gif"
+        alt=""
+        className="mascot floaty"
+        style={{ width: 150, height: 129, objectFit: "contain", display: "block", backgroundImage: "none" }}
+      />
     </div>
 
     <div className="t-display" style={{ fontSize: 32, marginTop: 24, textAlign: "center" }}>
-      <span style={{ fontStyle: "italic", color: "var(--fire-red)" }}>Back</span> your instinct.
+      <span style={{ color: "var(--fire-red)" }}>Back</span> your instinct.
     </div>
     <div style={{ fontSize: 14, color: "var(--text-dim)", marginTop: 10, textAlign: "center", maxWidth: 300, lineHeight: 1.5 }}>
       Live predictions. Real fans. Pick a profile to enter the arena.
@@ -1333,7 +1338,7 @@ const ProfilePicker = ({ onSelect }) => (
       ))}
     </div>
 
-    <button onClick={() => onSelect(null)} className="btn btn-ghost" style={{ marginTop: 36 }}>
+    <button onClick={() => onSelect(null)} className="btn btn-ghost" style={{ marginTop: 36, borderRadius: 4 }}>
       Manage profiles
     </button>
 
@@ -1383,7 +1388,7 @@ const LiveDiscovery = ({ profile, onContinue, organic }) => (
           ? "Kayla shared her Q3 pick. Tap in to follow along — no funding needed yet."
           : "You're courtside. We've matched you to your section. Tap in for live picks, scores, and the room."}
       </div>
-      <button className="btn btn-primary btn-cta-full" onClick={onContinue}>
+      <button className="btn btn-primary btn-cta-full" style={{ borderRadius: "var(--r-xs)" }} onClick={onContinue}>
         <Icon name="lightning" size={14} color="#fff"/>
         Continue · 2 quick questions
       </button>
