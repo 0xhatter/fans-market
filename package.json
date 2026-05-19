@@ -1,0 +1,17 @@
+{
+  "name": "fans-market",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "prepare:next": "node scripts/prepare-next.mjs",
+    "prebuild": "node scripts/prepare-next.mjs",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "^15.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}
