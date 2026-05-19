@@ -1310,7 +1310,10 @@ const ProfilePicker = ({ onSelect }) => (
         src="/VideoProject11-ezgif.com-gif-maker.gif"
         alt=""
         className="mascot floaty"
-        style={{ width: 150, height: 129, objectFit: "contain", display: "block", backgroundImage: "none" }}
+        style={{
+          width: 150, height: 129, objectFit: "contain", display: "block", backgroundImage: "none",
+          filter: "blur(0.5px)", color: "rgba(255, 255, 255, 0)",
+        }}
       />
     </div>
 
